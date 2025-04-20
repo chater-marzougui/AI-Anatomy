@@ -12,12 +12,13 @@
   <a href="https://github.com/chater-marzougui/AI-Anatomy/issues">
     <img src="https://img.shields.io/github/issues/chater-marzougui/AI-Anatomy.svg?style=for-the-badge" />
   </a>
-  <a href="https://github.com/chater-marzougui/AI-Anatomy/blob/main/LICENSE">
+  <a href="https://github.com/chater-marzougui/AI-Anatomy/blob/main/LICENSE.txt">
     <img src="https://img.shields.io/github/license/chater-marzougui/AI-Anatomy.svg?style=for-the-badge" />
   </a>
   <a>
 
   [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/chater-marzougui-342125299/)
+
   </a> 
 
 </div>
@@ -112,14 +113,14 @@ Contributions are welcome! Open a PR or an issue and let's improve this app toge
 
 ## 📄 License
 
-Distributed under the MIT License. See [`LICENSE`](LICENSE) for more info.
+Distributed under the MIT License. See [`LICENSE`](LICENSE.txt) for more info.
 
 ---
 
 ## ✨ Author
 
 Made with 💙 by [Chater Marzougui](https://github.com/chater-marzougui)
-- [@Chater-marzougui](linkedin-url) - chater.mrezgui2002@gmail.com <br/>
+- [@Chater-marzougui](https://linkedin.com/in/chater-marzougui-342125299) - chater.mrezgui2002@gmail.com <br/>
 
 
 
