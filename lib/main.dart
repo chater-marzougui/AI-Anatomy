@@ -122,7 +122,7 @@ class _MentalHealthChatScreenState extends State<MentalHealthChatScreen> with Si
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
-  final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: 'AIzaSyD7Ub-fmdXtKoLH6rFBThNDKEA3NKiMAbA');
+  final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: 'YOUR_API_KEY');
   late AnimationController _animationController;
   String _currentLang = "english";
 
@@ -213,7 +213,6 @@ class _MentalHealthChatScreenState extends State<MentalHealthChatScreen> with Si
       matchDateTimeComponents: DateTimeComponents.time,
     );
 
-    print('Test notification scheduled for: $scheduledTime');
   }
 
 
@@ -360,7 +359,9 @@ class _MentalHealthChatScreenState extends State<MentalHealthChatScreen> with Si
           children: [
             Text(
               'Would you like to schedule reminders for:',
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.textTheme.bodyMedium?.color?.withAlpha(180),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -468,10 +469,6 @@ class _MentalHealthChatScreenState extends State<MentalHealthChatScreen> with Si
         minutes,
       );
 
-      print('Now TZ: ${tz.TZDateTime.now(tz.local)}');
-      print('Scheduled TZ: $scheduledTime');
-
-
       // If the time has already passed today, schedule for tomorrow
       if (scheduledTime.isBefore(now)) {
         scheduledTime = scheduledTime.add(Duration(days: 1));
@@ -516,10 +513,6 @@ class _MentalHealthChatScreenState extends State<MentalHealthChatScreen> with Si
       android: androidDetails,
       iOS: iosDetails,
     );
-
-    print("="*50);
-    print(tz.local);
-
     // Schedule daily notification
     await _flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -944,283 +937,283 @@ class _MentalHealthChatScreenState extends State<MentalHealthChatScreen> with Si
         backgroundColor: isDarkMode ? Color(0xFF1E1E1E) : Color(0xFF2A93D5),
       ),
       body: Container(
-      decoration: BoxDecoration(
-      gradient: LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: isDarkMode
-          ? [Color(0xFF1E1E1E), Color(0xFF121212)]
-          : [Color(0xFFE6F4FF), Colors.white],
-    ),
-    ),
-    child: Column(
-    children: [
-    Expanded(
-    child: ListView.builder(
-    controller: _scrollController,
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    itemCount: _messages.length,
-    itemBuilder: (context, index) {
-    final message = _messages[index];
-    final isUser = message.isUser;
-
-    return Padding(
-    padding: const EdgeInsets.only(bottom: 16.0),
-    child: Row(
-    mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    if (!isUser)
-    Padding(
-    padding: const EdgeInsets.only(right: 8.0, top: 4.0),
-    child: Image.asset(
-    'assets/icons/mini_logo.png',
-    height: 32,
-    width: 32,
-    ),
-    ),
-    Flexible(
-    child: Container(
-    constraints: BoxConstraints(
-    maxWidth: MediaQuery.of(context).size.width * 0.7,
-    ),
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: isUser
-            ? (isDarkMode ? Color(0xFF37CAEC).withAlpha(210) : Color(0xFF37CAEC))
-            : (isDarkMode ? Color(0xFF2A2A2A) : Colors.white),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(isUser ? 20 : 4),
-          topRight: Radius.circular(isUser ? 4 : 20),
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(16),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Text(
-            message.content,
-            style: TextStyle(
-              fontSize: 16,
-              color: isUser
-                  ? Colors.white
-                  : (isDarkMode ? Colors.white : Colors.black87),
-              height: 1.4,
-            ),
-          ),
-          if (!isUser)
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Icon(
-                Icons.volume_up,
-                size: 14,
-                color: isDarkMode ? Colors.white30 : Colors.grey[400],
-              ),
-            ),
-        ],
-      ),
-    ),
-    ),
-      if (isUser)
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 4.0),
-          child: SvgPicture.string(
-            userAvatarSvg,
-            height: 32,
-            width: 32,
-          ),
-        ),
-    ],
-    ),
-    );
-    },
-    ),
-    ),
-      if (_isLoading)
-        Container(
-          padding: const EdgeInsets.all(12.0),
-          margin: EdgeInsets.only(left: 56, bottom: 12, right: 60),
-          decoration: BoxDecoration(
-            color: isDarkMode ? Color(0xFF2A2A2A) : Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(16),
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2A93D5)),
-                ),
-              ),
-              SizedBox(width: 12),
-              Text(
-                'Thinking...',
-                style: TextStyle(
-                  color: isDarkMode ? Colors.white70 : Colors.grey[600],
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         decoration: BoxDecoration(
-          color: isDarkMode ? Color(0xFF1E1E1E) : Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(16),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, -5),
-            ),
-          ],
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: isDarkMode
+                ? [Color(0xFF1E1E1E), Color(0xFF121212)]
+                : [Color(0xFFE6F4FF), Colors.white],
           ),
         ),
-        child: SafeArea(
-          child: Row(
+          child: Column(
             children: [
-              // Microphone button for voice input
-              GestureDetector(
-                onTap: _startListening,
-                child: Container(
-                  margin: EdgeInsets.only(right: 8),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: _isListening
-                          ? [Colors.red, Colors.redAccent]
-                          : [Color(0xFF2A93D5).withAlpha(180), Color(0xFF37CAEC).withAlpha(180)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFF2A93D5).withAlpha(64),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    _isListening ? Icons.mic : Icons.mic_none,
-                    color: Colors.white,
-                    size: 24,
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    final message = _messages[index];
+                    final isUser = message.isUser;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Row(
+                          mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (!isUser)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0, top: 4.0),
+                                child: Image.asset(
+                                'assets/icons/mini_logo.png',
+                                height: 32,
+                                width: 32,
+                                ),
+                              ),
+                            Flexible(
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: isUser
+                                        ? (isDarkMode ? Color(0xFF37CAEC).withAlpha(210) : Color(0xFF37CAEC))
+                                        : (isDarkMode ? Color(0xFF2A2A2A) : Colors.white),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(isUser ? 20 : 4),
+                                      topRight: Radius.circular(isUser ? 4 : 20),
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withAlpha(16),
+                                        blurRadius: 10,
+                                        offset: Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Text(
+                                        message.content,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: isUser
+                                              ? Colors.white
+                                              : (isDarkMode ? Colors.white : Colors.black87),
+                                          height: 1.4,
+                                        ),
+                                      ),
+                                      if (!isUser)
+                                        Positioned(
+                                          right: 0,
+                                          bottom: 0,
+                                          child: Icon(
+                                            Icons.volume_up,
+                                            size: 14,
+                                            color: isDarkMode ? Colors.white30 : Colors.grey[400],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                              ),
+                            ),
+                            if (isUser)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                                child: SvgPicture.string(
+                                  userAvatarSvg,
+                                  height: 32,
+                                  width: 32,
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: isDarkMode ? Color(0xFF2A2A2A) : Color(0xFFF0F8FF),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: isDarkMode ? Colors.grey[800]! : Color(0xFFE1E8ED),
-                      width: 1,
+            if (_isLoading)
+              Container(
+                padding: const EdgeInsets.all(12.0),
+                margin: EdgeInsets.only(left: 56, bottom: 12, right: 60),
+                decoration: BoxDecoration(
+                  color: isDarkMode ? Color(0xFF2A2A2A) : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(16),
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
                     ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2A93D5)),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      'Thinking...',
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.white70 : Colors.grey[600],
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              decoration: BoxDecoration(
+                color: isDarkMode ? Color(0xFF1E1E1E) : Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(16),
+                    spreadRadius: 1,
+                    blurRadius: 10,
+                    offset: Offset(0, -5),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _controller,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: isDarkMode ? Colors.white : Colors.black87,
+                ],
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+              ),
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    // Microphone button for voice input
+                    GestureDetector(
+                      onTap: _startListening,
+                      child: Container(
+                        margin: EdgeInsets.only(right: 8),
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: _isListening
+                                ? [Colors.red, Colors.redAccent]
+                                : [Color(0xFF2A93D5).withAlpha(180), Color(0xFF37CAEC).withAlpha(180)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          decoration: InputDecoration(
-                            hintText: _isListening ? "Listening..." : "Send a message...",
-                            hintStyle: TextStyle(
-                              color: _isListening
-                                  ? (isDarkMode ? Colors.red[300] : Colors.red[400])
-                                  : (isDarkMode ? Colors.grey[400] : Colors.grey[500]),
-                              fontSize: 16,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF2A93D5).withAlpha(64),
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
                             ),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                          ),
-                          maxLines: null,
-                          textInputAction: TextInputAction.send,
-                          onSubmitted: (text) {
-                            if (text.trim().isNotEmpty) {
-                              sendMessage(text);
-                            }
-                          },
+                          ],
+                        ),
+                        child: Icon(
+                          _isListening ? Icons.mic : Icons.mic_none,
+                          color: Colors.white,
+                          size: 24,
                         ),
                       ),
-                      AnimatedBuilder(
-                        animation: _animationController,
-                        builder: (context, child) {
-                          return GestureDetector(
-                            onTap: () {
-                              final text = _controller.text.trim();
-                              if (text.isNotEmpty) {
-                                sendMessage(text);
-                                _animationController.forward(from: 0.0);
-                              }
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 6),
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [Color(0xFF2A93D5), Color(0xFF37CAEC)],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isDarkMode ? Color(0xFF2A2A2A) : Color(0xFFF0F8FF),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            color: isDarkMode ? Colors.grey[800]! : Color(0xFFE1E8ED),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _controller,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: isDarkMode ? Colors.white : Colors.black87,
                                 ),
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(0xFF2A93D5).withAlpha(64),
-                                    blurRadius: 10,
-                                    offset: Offset(0, 4),
+                                decoration: InputDecoration(
+                                  hintText: _isListening ? "Listening..." : "Send a message...",
+                                  hintStyle: TextStyle(
+                                    color: _isListening
+                                        ? (isDarkMode ? Colors.red[300] : Colors.red[400])
+                                        : (isDarkMode ? Colors.grey[400] : Colors.grey[500]),
+                                    fontSize: 16,
                                   ),
-                                ],
-                              ),
-                              child: Transform.rotate(
-                                angle: _animationController.value * 2.0 * 3.14159,
-                                child: Icon(
-                                  Icons.send_rounded,
-                                  color: Colors.white,
-                                  size: 20,
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                                 ),
+                                maxLines: null,
+                                textInputAction: TextInputAction.send,
+                                onSubmitted: (text) {
+                                  if (text.trim().isNotEmpty) {
+                                    sendMessage(text);
+                                  }
+                                },
                               ),
                             ),
-                          );
-                        },
+                            AnimatedBuilder(
+                              animation: _animationController,
+                              builder: (context, child) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    final text = _controller.text.trim();
+                                    if (text.isNotEmpty) {
+                                      sendMessage(text);
+                                      _animationController.forward(from: 0.0);
+                                    }
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 6),
+                                    padding: EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Color(0xFF2A93D5), Color(0xFF37CAEC)],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color(0xFF2A93D5).withAlpha(64),
+                                          blurRadius: 10,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Transform.rotate(
+                                      angle: _animationController.value * 2.0 * 3.14159,
+                                      child: Icon(
+                                        Icons.send_rounded,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-    ],
-    ),
       ),
     );
   }
